@@ -6,6 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -19,6 +24,9 @@
     "eslint-plugin-promise": "4",
     "eslint-plugin-standard": "4",
     "git-commit-msg-linter": "^2.3.11",
+    "husky": "^4.2.2",
+    "lint-staged": "^10.0.7",
     "typescript": "^3.7.5"
-  }
+  },
+  "dependencies": {}
 }
