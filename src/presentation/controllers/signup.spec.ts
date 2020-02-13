@@ -48,3 +48,19 @@ describe('SignUp Controller', () => {
     expect(httResponse.body).toEqual(new MissingParamError('password'))
   })
 })
+
+describe('SignUp Controller', () => {
+  test('Should return 400 if no password confirmation is provided', () => {
+    const sut = new SignUpController()
+    const httRequest = {
+      body: {
+        email: 'any_email',
+        password: 'any_password',
+        name: 'any_name'
+      }
+    }
+    const httResponse = sut.handle(httRequest)
+    expect(httResponse.statusCode).toBe(400)
+    expect(httResponse.body).toEqual(new MissingParamError('passwordConfirmation'))
+  })
+})
