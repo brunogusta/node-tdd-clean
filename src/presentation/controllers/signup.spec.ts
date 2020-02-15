@@ -128,6 +128,25 @@ describe('Shound call EmailValidator with correct email', () => {
   })
 })
 
+describe('Shound return 400 if passwords is not equals', () => {
+  test('Should return 400 if an invalid email is provided', () => {
+    const { sut } = makeSut()
+
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'diferent_password'
+      }
+    }
+
+    const httResponse = sut.handle(httpRequest)
+    expect(httResponse.statusCode).toBe(400)
+    expect(httResponse.body).toEqual(new InvalidParamError('passwordConfirmation'))
+  })
+})
+
 describe('SignUp Controller', () => {
   test('Should return 500 if EmailValidator throws', () => {
     const { sut, emailValidatorStub } = makeSut()
