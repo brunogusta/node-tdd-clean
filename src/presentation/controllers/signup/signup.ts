@@ -1,6 +1,6 @@
 import { AddAccount } from '../../../domain/user-cases/add-account'
 import { InvalidParamError, MissingParamError } from '../../errors'
-import { badRequest, serverError } from '../../helpers'
+import { badRequest, ok, serverError } from '../../helpers'
 import { Controller, EmailValidator, HttpRequest, HttpResponse } from './signup-protocols'
 
 export class SignUpController implements Controller {
@@ -37,15 +37,7 @@ export class SignUpController implements Controller {
         password
       })
 
-      return {
-        statusCode: 200,
-        body: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          password: user.password
-        }
-      }
+      return ok(user)
     } catch (e) {
       // console.error(e)
       return serverError()
