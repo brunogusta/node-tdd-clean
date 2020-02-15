@@ -147,6 +147,25 @@ describe('SignUp Controller', () => {
 })
 
 describe('SignUp Controller', () => {
+  test('Shound return 400 if passwords is not equals', () => {
+    const { sut } = makeSut()
+
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'diferent_password'
+      }
+    }
+
+    const httResponse = sut.handle(httpRequest)
+    expect(httResponse.statusCode).toBe(400)
+    expect(httResponse.body).toEqual(new InvalidParamError('passwordConfirmation'))
+  })
+})
+
+describe('SignUp Controller', () => {
   test('Shound call AddAccount with correct values', () => {
     const { sut, addAccountStub } = makeSut()
     const addSpy = jest.spyOn(addAccountStub, 'add')
@@ -170,21 +189,24 @@ describe('SignUp Controller', () => {
 })
 
 describe('SignUp Controller', () => {
-  test('Shound return 400 if passwords is not equals', () => {
-    const { sut } = makeSut()
+  test('Should return 500 if AddAccountFails throws', () => {
+    const { sut, addAccountStub } = makeSut()
+    jest.spyOn(addAccountStub, 'add').mockImplementationOnce(() => {
+      throw new Error()
+    })
 
     const httpRequest = {
       body: {
         name: 'any_name',
         email: 'any_email@mail.com',
         password: 'any_password',
-        passwordConfirmation: 'diferent_password'
+        passwordConfirmation: 'any_password'
       }
     }
 
     const httResponse = sut.handle(httpRequest)
-    expect(httResponse.statusCode).toBe(400)
-    expect(httResponse.body).toEqual(new InvalidParamError('passwordConfirmation'))
+    expect(httResponse.statusCode).toBe(500)
+    expect(httResponse.body).toEqual(new ServerError())
   })
 })
 
