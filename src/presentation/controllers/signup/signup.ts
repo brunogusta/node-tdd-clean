@@ -1,5 +1,5 @@
-import { AddAccount } from '~/domain/user-cases/add-account'
 import { InvalidParamError, MissingParamError } from '~/presentation/errors'
+import { AddAccount } from '../../../domain/user-cases/add-account'
 import { badRequest, ok, serverError } from '../../helpers'
 import { Controller, EmailValidator, HttpRequest, HttpResponse } from './signup-protocols'
 
