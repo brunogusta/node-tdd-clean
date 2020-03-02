@@ -1,6 +1,6 @@
+import { AddAccount } from '~/domain/user-cases/add-account'
 import { InvalidParamError, MissingParamError } from '~/presentation/errors'
-import { AddAccount } from '../../../domain/user-cases/add-account'
-import { badRequest, ok, serverError } from '../../helpers'
+import { badRequest, ok, serverError } from '~/presentation/helpers'
 import { Controller, EmailValidator, HttpRequest, HttpResponse } from './signup-protocols'
 
 export class SignUpController implements Controller {
@@ -39,7 +39,7 @@ export class SignUpController implements Controller {
       return ok(account)
     } catch (e) {
       // console.error(e)
-      return serverError()
+      return serverError(e)
     }
   }
 }
