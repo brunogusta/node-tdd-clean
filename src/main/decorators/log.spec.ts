@@ -1,4 +1,4 @@
-import { Controller, HttpResponse } from '../../presentation/protocols'
+import { Controller, HttpResponse } from '~/presentation/protocols'
 import { LogControllerDecorator } from './log'
 
 interface SutTypes {
