@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["src/*"],
+      "core/*": ["core/*"]
+    }
+  },
+  "eslint.workingDirectories": [
+    {
+      "directory": "./client",
+      "changeProcessCWD": true
+    }
+  ],
+}
