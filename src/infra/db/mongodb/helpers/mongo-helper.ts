@@ -11,6 +11,7 @@ export const MongoHelper = {
       useUnifiedTopology: true
     })
   },
+
   async disconnect (): Promise<void> {
     await this.client.close()
     this.client = null
