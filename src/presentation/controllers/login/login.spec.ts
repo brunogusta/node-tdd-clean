@@ -174,6 +174,6 @@ describe('Login Controller', () => {
     }
 
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(ok('login successfull'))
+    expect(httpResponse).toEqual(ok({ accessToken: 'any_token' }))
   })
 })
