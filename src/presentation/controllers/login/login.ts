@@ -1,3 +1,4 @@
+import { Authentication } from '~/domain/user-cases/authentication'
 import { InvalidParamError, MissingParamError } from '~/presentation/errors'
 import { badRequest, serverError } from '~/presentation/helpers'
 import { ok } from '~/presentation/helpers/http-helper'
@@ -6,14 +7,16 @@ import { EmailValidator } from '../signup/signup-protocols'
 
 export class LoginController implements Controller {
   private readonly emailValidator: EmailValidator
+  private readonly authentication: Authentication
 
-  constructor (emailValidator: EmailValidator) {
+  constructor (emailValidator: EmailValidator, authentication: Authentication) {
     this.emailValidator = emailValidator
+    this.authentication = authentication
   }
 
   async handle (httRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const { email } = httRequest.body
+      const { email, password } = httRequest.body
       const requiredFields = ['email', 'password']
 
       for (const field of requiredFields) {
@@ -27,6 +30,8 @@ export class LoginController implements Controller {
       if (!isValid) {
         return badRequest(new InvalidParamError('email'))
       }
+
+      await this.authentication.auth(email, password)
 
       return await ok('login successfull')
     } catch (e) {
