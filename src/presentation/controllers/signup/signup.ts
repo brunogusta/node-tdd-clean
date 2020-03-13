@@ -1,4 +1,4 @@
-import { AddAccount } from '~/domain/user-cases/add-account'
+import { AddAccount } from '~/domain/user-cases/protocols/add-account'
 import { badRequest, ok, serverError } from '~/presentation/helpers'
 import { Validation } from '~/presentation/protocols/validation'
 import { Controller, HttpRequest, HttpResponse } from './signup-protocols'
