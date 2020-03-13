@@ -1,3 +1,4 @@
+import { HashComparer } from '~/data/protocols/criptography/hash-comparer'
 import { LoadAccountByEmailRepository } from '~/data/protocols/db/load-account-by-email-repository'
 import { AccountModel } from '~/domain/models/account'
 import { DbAuthentication } from './db-authentication'
@@ -5,6 +6,7 @@ import { DbAuthentication } from './db-authentication'
 interface SutTypes {
   sut: DbAuthentication
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
+  hashComparerStub: HashComparer
 }
 
 const makeLoadAccountStub = (): LoadAccountByEmailRepository => {
@@ -14,7 +16,7 @@ const makeLoadAccountStub = (): LoadAccountByEmailRepository => {
         id: 'any_id',
         name: 'any_name',
         email: 'any_email',
-        password: 'any_password'
+        password: 'hashed_password'
       }
 
       return new Promise(resolve => resolve(account))
@@ -22,14 +24,24 @@ const makeLoadAccountStub = (): LoadAccountByEmailRepository => {
   }
   return new LoadAccountByEmailRepositoryStub()
 }
+const makeHashComparer = (): HashComparer => {
+  class HashComparerStub implements HashComparer {
+    async compare (password: string, hashedPassword: string): Promise<boolean> {
+      return new Promise(resolve => resolve(true))
+    }
+  }
+  return new HashComparerStub()
+}
 
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositoryStub = makeLoadAccountStub()
-  const sut = new DbAuthentication(loadAccountByEmailRepositoryStub)
+  const hashComparerStub = makeHashComparer()
+  const sut = new DbAuthentication(loadAccountByEmailRepositoryStub, hashComparerStub)
 
   return {
     sut,
-    loadAccountByEmailRepositoryStub
+    loadAccountByEmailRepositoryStub,
+    hashComparerStub
   }
 }
 
@@ -70,5 +82,18 @@ describe('MongoDb Authentication', () => {
     })
 
     expect(accessToken).toBeNull()
+  })
+
+  test('Should call hash comparer with correct values', async () => {
+    const { sut, hashComparerStub } = makeSut()
+
+    const compareSpy = jest.spyOn(hashComparerStub, 'compare')
+
+    await sut.auth({
+      email: 'any_email@email.com',
+      password: 'any_password'
+    })
+
+    expect(compareSpy).toHaveBeenCalledWith('any_password', 'hashed_password')
   })
 })
