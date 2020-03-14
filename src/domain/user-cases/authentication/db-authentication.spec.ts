@@ -167,4 +167,15 @@ describe('MongoDb Authentication', () => {
 
     await expect(promise).rejects.toThrow()
   })
+
+  test('Should return TokenGenerator with correct id', async () => {
+    const { sut } = makeSut()
+
+    const accessToken = await sut.auth({
+      email: 'any_email@email.com',
+      password: 'any_password'
+    })
+
+    expect(accessToken).toBe('any_token')
+  })
 })
