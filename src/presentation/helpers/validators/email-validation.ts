@@ -13,6 +13,7 @@ export class EmailValidation implements Validation {
 
   validate (input: any): Error {
     const isValid = this.emailValidator.isValid(input[this.fieldName])
+    console.log(isValid)
     if (!isValid) {
       return new InvalidParamError(this.fieldName)
     }

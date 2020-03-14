@@ -1,5 +1,6 @@
 import { EmailValidator } from '~/presentation/protocols/email-validator'
 import { EmailValidation } from './email-validation'
+import { InvalidParamError } from '~/presentation/errors'
 
 interface SutTypes {
   sut: EmailValidation
@@ -40,5 +41,14 @@ describe('Email Validation', () => {
     })
 
     expect(sut.validate).toThrow()
+  })
+
+  test('Should return a InvalidParamError if validation of email fails', () => {
+    const { sut, emailValidatorStub } = makeSut()
+    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
+
+    const error = sut.validate({ email: 'any_email@mail.com' })
+
+    expect(error).toEqual(new InvalidParamError('email'))
   })
 })
