@@ -204,4 +204,18 @@ describe('MongoDb Authentication', () => {
 
     expect(updateSpy).toHaveBeenCalledWith('any_id', 'any_token')
   })
+
+  test('Should throws if TokenGenerator throws', async () => {
+    const { sut, updateAccessTokenRepositoryStub } = makeSut()
+
+    jest.spyOn(updateAccessTokenRepositoryStub, 'update')
+      .mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+
+    const promise = sut.auth({
+      email: 'any_email@email.com',
+      password: 'any_password'
+    })
+
+    await expect(promise).rejects.toThrow()
+  })
 })
