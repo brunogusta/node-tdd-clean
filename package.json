@@ -66,6 +66,6 @@
     "express": "^4.17.1",
     "fast-glob": "^3.2.2",
     "mongodb": "^3.5.3",
-    "validator": "^12.2.0"
+    "validator": "^13.7.0"
   }
 }
